@@ -1,4 +1,30 @@
+<html>
+    <header>
+        <title>Rock, Paper, Scissors</title>
+    </header>
+    <body>
+        <div class="header">
+            <h1>Rock, Paper, Scissors</h1>
+        </div>
+
+        <div id="buttons">
+            <input type="button" value="Rock" id="rock">
+            <input type="button" value="Paper" id="paper">
+            <input type="button" value="Scissors" id="scissors">
+        </div>
+        <div class="results">
+            <h2 id="roundResult"></h2> 
+            <h2 id="currentScore"></h2>
+            <h2 id="winner"></h2>
+        </div>
+    </body>
+</html>
+
+
 <script>
+    let userScore = 0;
+    let computerScore = 0;
+
     function computerPlay() {
         let myArray = ["ROCK", "PAPER", "SCISSORS"];
         let randomChoice = myArray[Math.floor(Math.random()*myArray.length)];
@@ -8,48 +34,93 @@
     function playRound(playerSelection, computerSelection) {
 
         playerSelection = playerSelection.toUpperCase();
+        
         if (playerSelection == "ROCK") {
             if (computerSelection == "ROCK") {
+                updateScore();
                 return("Draw! Rock vs Rock");
             }
             else if (computerSelection == "PAPER") {
+                computerScore++;
+                updateScore();
                 return("You lose! Paper beats Rock");
             }
             else {
+                userScore++;
+                updateScore();
                 return("You win! Rock beats Scissors");
             }
         }
         else if (playerSelection == "PAPER") {
             if (computerSelection == "ROCK") {
+                userScore++;
+                updateScore();
                 return("You win! Paper beats Rock");
             }
             else if (computerSelection == "PAPER") {
+                updateScore();
                 return("Draw! Paper vs Paper");
             }
             else {
+                computerScore++;
+                updateScore();
                 return("You lose! Scissors beats paper");
             }
         }
         else {
             if (computerSelection == "ROCK") {
+                computerScore++;
+                updateScore();
                 return("You lose! Rock beats Scissors");
             }
             else if (computerSelection == "PAPER") {
+                userScore++;
+                updateScore();
                 return("You win! Scissors beats Paper");
             }
             else {
+                updateScore();
                 return("Draw! Scissors vs Scissors");
             }
         }
     }
 
-    function game() {
-        for (let i = 0; i < 5; i++) {
-            let userInput = prompt("Rock, Paper or Scissors?");
-            console.log(playRound(userInput, computerPlay()));
+    function updateScore() {
+        document.getElementById("currentScore").innerHTML = `User score: ${userScore}. Computer score: ${computerScore}.`;
+        winner();
+    }
+    function winner() {
+        if (userScore >= 5) {
+            document.getElementById("winner").innerHTML = "User wins!";
+            document.getElementById("buttons").style.display = "none";
+        } else if (computerScore >= 5) {
+            document.getElementById("winner").innerHTML = "Computer wins!"
+            document.getElementById("buttons").style.display = "none";
+        } else {
+            return;
         }
     }
 
+    const rockSelected = document.getElementById("rock"); 
+    const paperSelected = document.getElementById("paper");
+    const scissorsSelected = document.getElementById("scissors");
 
+    rockSelected.addEventListener("click", function(){
+        document.getElementById("roundResult").innerHTML = 
+        (playRound("rock", computerPlay())); //plays one round vs computer as "rock"
+    });
+
+    paperSelected.addEventListener("click", function(){
+        document.getElementById("roundResult").innerHTML = 
+        (playRound("paper", computerPlay())); //plays one round vs computer as "paper"
+    });
+
+    scissorsSelected.addEventListener("click", function(){
+        document.getElementById("roundResult").innerHTML = 
+        (playRound("scissors", computerPlay())); //plays one round vs computer as "scissors"
+    });
 
 </script>
+
+
+
